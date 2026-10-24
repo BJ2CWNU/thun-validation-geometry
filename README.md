@@ -18,7 +18,9 @@ aggregation estimand) pair.
 DOI [10.5281/zenodo.23122892](https://doi.org/10.5281/zenodo.23122892).
 SHA-256 checksums of the archived files are listed in
 `MANIFEST_sha256.md`. License: MIT (`LICENSE`); `quick_test.py` and this
-README are repository additions outside the Zenodo manifest.
+README are repository additions outside the Zenodo manifest, and
+`README_deposit.md` (listed in the manifest) is the Zenodo deposit's own
+README, superseded here by this file.
 
 ## Contents
 
@@ -41,6 +43,8 @@ README are repository additions outside the Zenodo manifest.
 
 ## Quick test (no dependencies, < 1 s)
 
+Run from the repository root:
+
 ```
 python quick_test.py
 ```
@@ -57,18 +61,32 @@ fold-paired Kriging counts, the LOO-FL line-macro means (0.00294 vs
 `claim_tests_v0.12.py` re-derives every derived numerical claim of the
 manuscript from the canonical tables and fails on any inconsistency. It
 takes the manuscript text file as its argument and reads the CSV locations
-from environment variables:
+from environment variables, which **must be set** (without them the script
+falls back to the author's local paths and reports spurious failures).
+From the repository root:
+
+Linux/macOS:
 
 ```
-set PSI_ANALYSIS_DIR=<folder containing the CSVs>
-set PSI_BLOCK_RAW_CSV=<path to summary_block_cv_v12.csv>
+export PSI_ANALYSIS_DIR="$(pwd)"
+export PSI_BLOCK_RAW_CSV="$(pwd)/summary_block_cv_v12.csv"
 python claim_tests_v0.12.py <manuscript.md>
 ```
 
-One assertion group (C14, the in-situ Layer C check) additionally requires
-`layerc_results.csv`, which contains surveyed coordinates and is therefore
-not publicly distributable (see below); without it that single group
-reports a missing-file failure and all other groups run normally.
+Windows (cmd):
+
+```
+set PSI_ANALYSIS_DIR=%cd%
+set PSI_BLOCK_RAW_CSV=%cd%\summary_block_cv_v12.csv
+python claim_tests_v0.12.py <manuscript.md>
+```
+
+**Expected outcome on this public set:** one assertion group (C14, the
+in-situ Layer C check) requires `layerc_results.csv`, which contains
+surveyed coordinates and is therefore not publicly distributable (see
+below). It reports a single missing-file failure — the final line reads
+`RESULT: 1 claim test failure(s)` and the exit code is 1. All other groups
+(C1–C13, C15) run normally and pass.
 
 ## Requirements
 
